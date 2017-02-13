@@ -9,5 +9,6 @@ version          '0.1.0'
 depends 'ark'
 depends 'yum'
 depends 'java'
-depends 'ubuntu', '>=10.04'
-depends 'centos', '>=6.0'
+supports 'ubuntu', '>=10.04'
+supports 'centos', '>=6.0'
+

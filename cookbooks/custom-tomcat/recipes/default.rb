@@ -8,28 +8,28 @@
 #
 download_url = 'https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.42/bin/apache-tomcat-7.0.42.zip'
 
-group node['tomcat]['group']
-
+group node['tomcat']['group'] 
+ 
 user node['tomcat']['user'] do
-        group node['tomcat']['group']
-        system true
-        shell '/bin/bash'
+group node['tomcat']['group']
+system true
+shell '/bin/bash'
 end
 
 ark 'tomcat' do
-        url 'download_url'
-        home_dir '/opt/tomcat'
-        owner node['tomcat']['user']
-        group group node['tomcat']['group']
+ url download_url
+ home_dir '/opt/tomcat'
+ owner node['tomcat']['user']
+ group node['tomcat']['group']
 end
 
-dist_dir, _config_dir = value_for_platform_family(
-   ['debian'] => %w( debian default ),
-   ['rnel'] => %w( redhat sysconfig)
-)
-
-
-template '/etc/init.d/tomcat' do
+dist_dir, _conf_dir = value_for_platform_family(
+  ['debian'] => %w( debian default ),
+  ['rhel'] => %w( redhat sysconfig )
+  )
+  
+  
+  template '/etc/init.d/tomcat' do
   source "#{dist_dir}/tomcat-init.erb"
   mode '0775'
   owner 'root'
@@ -39,16 +39,17 @@ template '/etc/init.d/tomcat' do
 end
 
 execute "chmod" do
-  command "chmod 755 /opt/tomcat/bin/*.sh"
-  action :run
-end
+   command "chmod 755 /opt/tomcat/bin/*.sh"
+   action :run
+  end
+  
 service 'tomcat' do
-  supports restart: true
-  action [ :enable, :start ]
+ supports restart: true
+ action [ :enable, :start]
 end
 
-execute "chkconfig' do
-  command "chkconfig tomcat on"
-  command "service tomcat start"
-  action :run
-end
+execute "chkconfig" do
+ command " chkconfig tomcat on"
+ command " service tomcat start"
+ action :run
+ end
